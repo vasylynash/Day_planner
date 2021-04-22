@@ -14,47 +14,62 @@ container.append(table);
 for (let i = 0; i < 24; i++) {
     if (i < 12) {
         tbody.append(`<tr class='row'> 
-    <td class='col-1 hour'> <div>${i}AM</div></td> 
-    <td class='col-10 description' timestamp='${i}AM'><textarea> </textarea></td>
-    <td class='col-1'><input type='button' class='saveBtn'/><i>SAVE</i></td>
+    <td class='col-1 hour' id="hour"> <div>${i}AM</div></td> 
+    <td class='col-10 description' timestamp='${i}AM' id="description"><textarea> </textarea></td>
+    <td class='col-1'><input type='button' class='saveBtn' id="save"/><i>SAVE</i></td>
     </tr>`)
     }
     else if (i === 12) {
         tbody.append(`<tr class='row'> 
-    <td class='col-1 hour'> <div>${i}PM</div></td> 
-    <td class='col-10 description' timestamp='${i}PM'><textarea> </textarea></td>
-    <td class='col-1'><input type='button' class='saveBtn'/><i>SAVE</i></td>
+    <td class='col-1 hour' id="hour"> <div>${i}PM</div></td>
+    <td class='col-10 description' timestamp='${i}PM' id="description"><textarea> </textarea></td>
+    <td class='col-1'><input type='button' class='saveBtn' id="save"/><i>SAVE</i></td>
     </tr>`)
     }
     else {
         tbody.append(`<tr class='row'> 
-    <td class='col-1 hour'> <div>${i - 12}PM</div></td> 
-    <td class='col-10 description' timestamp='${i - 12}PM'><textarea> </textarea></td>
-    <td class='col-1'><input type='button' class='saveBtn'/><i>SAVE</i></td>
+    <td class='col-1 hour' id="hour"> <div>${i - 12}PM</div></td>
+    <td class='col-10 description' timestamp='${i - 12}PM' id="description"><textarea> </textarea></td>
+    <td class='col-1'><input type='button' class='saveBtn' id="save"/><i>SAVE</i></td>
     </tr>`)
     }
     ;
 }
 
-var rows = $(".row");
-var hour = moment().format("hA"); // 3pm
+var hour = moment().format("hA");
 var times = $(".hour");
 var descriptions = $(".description");
+var buttons = $(".saveBtn");
 
 descriptions.filter(function () {
-    // console.log($(this).attr("timestamp").toLowerCase());
     return $(this).attr("timestamp") === hour;
 }).addClass("present");
 
 descriptions.filter(function () {
     var time = moment($(this).attr("timestamp"), "hA")
-    // console.log(moment(hour, "hA"));
     return time < moment(hour, "hA");
 }).addClass("past");
 
 descriptions.filter(function () {
     var time = moment($(this).attr("timestamp"), "hA")
-    // console.log(moment(hour, "hA"));
     return time > moment(hour, "hA");
 }).addClass("future");
 
+
+buttons.on("click", function (event) {
+    var entry = $(event.target).parent().siblings().eq(1).children().eq(0).val();
+    console.log(entry);
+    var time = $(event.target).parent().siblings().eq(1).attr("timestamp");
+    localStorage.setItem(`${time}`, entry);
+    console.log(time);
+})
+
+
+$(window).on("load", function () {
+    for (let i = 0; i < times.length; i++) {
+        var time = $(times)[i].innerText.trim();
+        var entry = localStorage.getItem(time);
+        var textarea = $("textarea");
+        $(descriptions).find(textarea)[i].innerText = entry;
+    }
+})
