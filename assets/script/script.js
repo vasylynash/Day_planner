@@ -16,14 +16,12 @@ for (let i = 0; i < 24; i++) {
     tbody.append(`<tr class='row'> 
     <td class='col-1 hour'> <div>${time}</div></td>
     <td class='col-10 description' timestamp='${time}'><textarea> </textarea></td>
-    <td class='col-1'><input type='button' class='saveBtn'/><i>Save</i></td>
+    <td class='col-1'><input type='button' class='saveBtn'/></td>
     </tr>`);
 }
 
 var hour = moment().format("hA");
-var times = $(".hour");
 var descriptions = $(".description");
-var buttons = $(".saveBtn");
 
 descriptions.filter(function () {
     return $(this).attr("timestamp") === hour;
@@ -40,6 +38,8 @@ descriptions.filter(function () {
 }).addClass("future");
 
 
+var buttons = $(".saveBtn");
+
 buttons.on("click", function (event) {
     var entry = $(event.target).parent().siblings().eq(1).children().eq(0).val();
     var processedEntry = entry.split("\n");
@@ -55,6 +55,8 @@ function checkDateAndClearStorage() {
         localStorage.setItem("date", currentDate);
     }
 }
+
+var times = $(".hour");
 
 function populateFromStorage() {
     for (let i = 0; i < times.length; i++) {

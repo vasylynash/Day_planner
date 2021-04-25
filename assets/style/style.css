@@ -75,7 +75,7 @@ textarea {
   border-bottom-right-radius: 15px;
   background-color: #06aed5;
   color: white;
-  background-image: url("floppy.png");
+  background-image: url("../images/floppy.png");
   background-repeat: no-repeat;
   background-position: center;
   width:95px;
